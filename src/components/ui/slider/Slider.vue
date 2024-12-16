@@ -47,16 +47,20 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
   >
     <SliderTrack
-      class="relative h-2 w-full data-[orientation=vertical]:w-2 grow overflow-hidden rounded-full bg-secondary"
+      class="relative h-2 w-full data-[orientation=vertical]:w-2 grow overflow-hidden rounded-full bg-[#F5F5DC]"
     >
       <SliderRange
-        class="absolute h-full data-[orientation=vertical]:w-full bg-primary"
+        class="absolute h-full data-[orientation=vertical]:w-full bg-[#F5F5DC]"
       />
     </SliderTrack>
     <SliderThumb
       v-for="(_, key) in modelValue"
       :key="key"
-      class="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-    />
+      class="block h-5 w-5 rounded-full border-2 border-[#4682B4] outline-none !important bg-[#4682B4] ring-offset-[#4682B4] thumbYear"
+    >
+    </SliderThumb>
   </SliderRoot>
 </template>
+<style scoped>
+
+</style>

@@ -47,7 +47,7 @@ body{
 
     --radius: 0.5rem;
 
-    --main-color: #4682B4;
+    --main-color: #000000;
   }
 
   .dark {
@@ -89,4 +89,30 @@ body{
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.header32{
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 130%;
+}
+.text14{
+  font-size: 14px;
+  font-weight: 400;
+}
+.text16{
+  font-size: 16px;
+  font-weight: 500;
+}
+.header24{
+  font-size: 24px;
+  font-weight: 500;
+}
+.header20{
+  font-size: 20px;
+  font-weight: 500;
+}
+.text16_light {
+  font-size: 16px;
+  font-weight: 400;
 }

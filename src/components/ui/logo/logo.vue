@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h1 class = "font-bold text-white text-5xl">ВремяЧтения</h1>
+  <router-link to="/catalog"><h1 class = "font-bold text-white text-5xl">ВремяИстории</h1></router-link>
 </template>
 
 <style scoped>
