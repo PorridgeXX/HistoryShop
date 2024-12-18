@@ -26,8 +26,8 @@ import CategorySelector from "@/views/adminPanel/usage/itemsControl/usage/catego
 const addItemStore = useAddItemStore();
 const name = ref<string>(''); // Название товара
 const description = ref<string>(''); // Описание товара
-const price = ref<number>(0); // Цена
-const year = ref<number>(0); // Год производства товара
+const price = ref<number>(); // Цена
+const year = ref<number>(); // Год производства товара
 
 /* ==================================================
    Handlers
@@ -42,6 +42,12 @@ const clickHandler = async () => {
 
     // Вызов метода для создания товара
     await addItemStore.createItem();
+
+    name.value = ""
+    description.value = ""
+    price.value = null
+    year.value = null
+    addItemStore.pciture = ""
   } catch (error) {
     console.error('Ошибка при создании товара:', error);
   }
