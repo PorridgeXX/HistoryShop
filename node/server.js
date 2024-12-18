@@ -1,5 +1,4 @@
-import {createRequire} from "module";
-
+import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 import express from "express";
@@ -34,10 +33,18 @@ app.post("/upload", upload.single("image"), (req, res) => {
     res.json({ filePath: `/uploads/${req.file.filename}` });
 });
 
+// Обслуживание статических файлов из папки dist
+app.use(express.static(path.join(__dirname, "dist")));
+
+// Обслуживание папки загрузок
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Ловим все остальные маршруты и перенаправляем их на index.html из dist
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
 
 // Запуск сервера
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
-
