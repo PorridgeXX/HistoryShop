@@ -1,0 +1,19 @@
+# Игнорируем папку node_modules
+node_modules/
+
+# Игнорируем папки и файлы IDE
+.vscode/
+.idea/
+*.iml
+
+# Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Папки сборки и кэши
+.cache/
+
+# Операционные системы
+.DS_Store
+Thumbs.db
