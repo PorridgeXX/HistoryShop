@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { ref, watch } from "vue"
-import { registration } from '@/views/Login/js/reg'
+import { registration } from '@/API/registrationRequests'
 import { useToast } from '@/components/ui/toast/use-toast'
-import { login } from "@/views/Login/js/login"
+import { useLoginStore } from '@/API/loginRequests'
 import {
   Card,
   CardContent,
@@ -31,7 +31,7 @@ const user = ref('')
 const password = ref('')
 const email = ref('')
 const currentTab = ref('account')
-
+const loginStore = useLoginStore()
 // Схемы валидации
 const loginSchema = yup.object({
   user: yup.string().required('Логин обязателен'),
@@ -96,7 +96,7 @@ const register = async () => {
 
 const logining = async () => {
   try {
-    const res = await login(user.value, password.value)
+    const res = await loginStore.login(user.value, password.value)
     if (res === 401) {
       toast({
         title: 'Ошибка 401',

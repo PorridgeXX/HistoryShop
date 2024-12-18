@@ -76,6 +76,11 @@ export const useCartStore = defineStore("cart", {
                 return total
             }, 0);
             console.log(this.total);
+        },
+        makeOrder(){
+            this.cart = this.cart.filter(item => !this.checkedList.includes(item));
+            saveToLocalStorage("cart", this.cart)
+            this.loadCart()
         }
     }
 })

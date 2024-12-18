@@ -10,11 +10,10 @@ import {useFetchGoodsStore} from "@/stores/fetchGoods.js"
 import {onMounted} from "vue";
 import Filter from "@/components/Catalog/usage/filter/Filter.vue"
 const GoodsStore = useFetchGoodsStore()
-import {getCategories} from "@/API/goods.js";
+import {getCategories} from "@/API/catalogRequests.js";
 
 onMounted(async () => {
   await GoodsStore.fetchAllGoods()
-  console.log(GoodsStore.productList)
 })
 </script>
 

@@ -12,11 +12,18 @@ import {
   SelectValue,
 } from '@/components/ui/select/index.js';
 import { Checkbox } from '@/components/ui/checkbox/index.js';
+import {useUiStore} from "@/components/Cart/js/ui.js";
+import {useCartStore} from "@/components/Cart/js/cart.js";
+import modal from "@/components/Cart/usage/modal.vue"
+const store = useCartStore();
+const uiStore = useUiStore();
 // yup import
 import * as yup from "yup";
 
 // vue imports
 import { ref } from "vue";
+import {Button} from "@/components/ui/button/index.js";
+
 
 // variables
 const nameInput = ref('');
@@ -37,6 +44,10 @@ const validateEmail = async () => {
   }
 };
 
+const clickHandler = () => {
+  uiStore.isDialogOpen = true
+  store.makeOrder()
+}
 </script>
 
 <template>
@@ -105,13 +116,16 @@ const validateEmail = async () => {
         <Label>Нужна упаковка</Label>
       </div>
       <div>
-        <button
-            class="cart__btn">
-          Оформить заказ
-        </button>
+            <button
+                @click = "clickHandler()"
+                class="cart__btn">
+              Оформить заказ
+            </button>
       </div>
     </div>
   </div>
+
+
 </template>
 
 <style scoped>

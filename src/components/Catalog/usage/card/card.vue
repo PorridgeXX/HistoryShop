@@ -1,48 +1,52 @@
 <script setup>
-import {Dialog, DialogContent, DialogDescription, DialogTrigger,} from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogTrigger } from '@/components/ui/dialog'
 import { useToast } from '@/components/ui/toast/use-toast'
-import {ref} from "vue";
-import {useCartStore} from "@/components/Cart/js/cart.js";
+import { ref } from "vue";
+import { useCartStore } from "@/components/Cart/js/cart.js";
+import { useFavoriteStore } from "@/stores/favoriteStore.js";
+
 const store = useCartStore();
-
-const { toast } = useToast()
-
-
+const { toast } = useToast();
+const favoriteStore = useFavoriteStore();
 
 const props = defineProps({
   item: {
-    type: Object
-  }
-})
+    type: Object,
+    required: true,
+  },
+});
+
 const handlerClick = async (id) => {
-  const res = await store.saveToCart(id)
-  if(res){
+  const res = await store.saveToCart(id);
+  if (res) {
     toast({
       title: 'Товар добавлен',
       description: `Был добавлен товар в корзину на сумму ${props.item.price}`,
       duration: 2000,
-    })
-  }else{
+    });
+  } else {
     toast({
       title: 'Нельзя добавить товар, который уже находится в корзине',
       duration: 2000,
-    })
+    });
   }
-console.log(res)
-}
+};
 
-console.log(props.item)
-let flag = ref(false)
+const toggleFavorite = () => {
+  if (favoriteStore.isFavorite(props.item.id)) {
+    favoriteStore.removeFavorite(props.item.id);
+  } else {
+    favoriteStore.addFavorite(props.item);
+  }
+};
 </script>
 
 <template>
   <div>
-    <!-- Основной контейнер карточки с фиксированным размером -->
-    <div class="w-[286px] h-[500px] p-4 rounded-lg item flex flex-col gap-2 bg-white  overflow-hidden">
+    <div class="w-[286px] h-[500px] p-4 rounded-lg item flex flex-col gap-2 bg-white overflow-hidden">
       <Dialog>
         <DialogTrigger>
-          <div
-              class="p-5 h-[330px] w-full bg-[#ECEFF3] relative rounded-lg grid grid-cols-1 place-items-center overflow-hidden">
+          <div class="p-5 h-[330px] w-full bg-[#ECEFF3] relative rounded-lg grid grid-cols-1 place-items-center overflow-hidden">
             <img :src="props.item.picture" alt="" class="w-auto h-auto max-w-full max-h-full object-contain">
           </div>
         </DialogTrigger>
@@ -58,7 +62,7 @@ let flag = ref(false)
                 <div>
                   <div class="flex flex-col items-end gap-5 mt-8">
                     <h3 class="header32 text-black">{{ props.item.price }}₽</h3>
-                    <button v-if="flag === false" class="text-3xl cart__btn py-2 important">
+                    <button @click="handlerClick(props.item.id)" class="text-3xl cart__btn py-2 important">
                       В корзину
                     </button>
                   </div>
@@ -68,19 +72,21 @@ let flag = ref(false)
           </DialogDescription>
         </DialogContent>
       </Dialog>
-      <!-- Оставшиеся элементы карточки -->
       <p class="font-medium text-base truncate">{{ props.item.price }}₽</p>
       <p class="font-medium text-xs truncate">{{ props.item.name }}</p>
       <p class="font-medium text-xs text-slate-500 truncate">{{ props.item.author }}</p>
       <div>
         <div class="flex gap-2">
-          <button class="cart__btn" @click="handlerClick(props.item.id)">В корзину</button>
-          <button class="bookmark__btn !important"><img src="/hui.svg" alt="Добавить в закладки"></button>
+          <button @click="handlerClick(props.item.id)" class="cart__btn">В корзину</button>
+          <button @click="toggleFavorite" class="bookmark__btn !important">
+            <img src="/hui.svg" alt="Избранное">
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .cart__btn{

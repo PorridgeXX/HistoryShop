@@ -1,5 +1,5 @@
 <script setup>
-import {getCategories, getCountries} from "@/API/goods.js";
+import {getCategories, getCountries} from "@/API/catalogRequests.js";
 import {onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {Checkbox} from "@/components/ui/checkbox/index.js";
@@ -61,10 +61,9 @@ const resetFilter = async () => {
 onMounted(async () => {
   const res = await getCategories();
   const res2 = await getCountries();
-  categories.value = res;
-  countries.value = res2;
-  console.log(res2)
-  console.log(res);
+  categories.value = res.map((item) => item[0]);
+  countries.value = res2.map((item) => item[0]);
+  console.log(res)
 })
 
 </script>

@@ -7,7 +7,7 @@
     </p>
     <router-link
         class="px-6 py-3 text-white bg-[var(--main-color)]  rounded-lg"
-        to="/"
+        to="/catalog"
     >
       Перейти в каталог
     </router-link>

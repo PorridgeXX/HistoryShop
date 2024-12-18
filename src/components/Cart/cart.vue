@@ -4,6 +4,9 @@ import {onMounted} from "vue";
 import CartItem from "@/components/Cart/usage/cartItem.vue"
 import CartPlaceholder from "@/components/Cart/usage/CartPlaceholder.vue";
 import MakeOrder from "@/components/Cart/usage/makeOrder.vue"
+import {useUiStore} from "@/components/Cart/js/ui.js";
+import modal from "@/components/Cart/usage/modal.vue"
+const uiStore = useUiStore();
 const store = useCartStore();
 
 onMounted(() => {
@@ -64,7 +67,7 @@ console.log(typeof store.cart)
         <MakeOrder />
       </div>
     </div>
-
+    <modal v-if = "uiStore.isDialogOpen"/>
     <!-- Если корзина пуста -->
     <div
         v-if="store.cart.length == 0"

@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
         Магазин посвященный антиквариату Российской истории. Найдите всё самое лучшее, в самом лучшем состоянии только у нас!
       </p>
       <div>
-        <router-link to="/login">       <Button
+        <router-link to="/catalog">       <Button
             class="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition duration-200"
         >
           Вход
