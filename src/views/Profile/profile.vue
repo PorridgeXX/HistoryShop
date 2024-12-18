@@ -1,4 +1,7 @@
 <script setup>
+/* ==================================================
+   Imports
+   ================================================== */
 import {
   Card,
   CardContent,
@@ -7,30 +10,58 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {useRouter} from "vue-router";
-import {Button} from "@/components/ui/button/index.js";
-import {getProfile} from "@/views/Profile/js/fetchProfile.js";
-import {onMounted, ref} from "vue";
-import {useLoginStore} from "@/API/loginRequests.js";
-const store = useLoginStore();
-let email = ref("");
-let username = ref("");
-const router = useRouter();
+import { Button } from "@/components/ui/button/index.js"
+import { useRouter } from "vue-router"
+import { getProfile } from "@/API/fetchProfile.js"
+import { onMounted, ref } from "vue"
+import { useLoginStore } from "@/API/loginRequests.js"
+
+
+/* ==================================================
+   State
+   ================================================== */
+const store = useLoginStore()
+const email = ref("")
+const username = ref("")
+const router = useRouter()
+
+
+/* ==================================================
+   Fetch Profile
+   ================================================== */
 const fetchProfile = async () => {
-  const profile = await getProfile();
-  email.value = profile.email;
-  username.value = profile.username;
-  console.log(username);
+  try {
+    const profile = await getProfile()
+    email.value = profile.email
+    username.value = profile.username
+    console.log("User profile data fetched:", profile)
+  } catch (error) {
+    console.error("Ошибка при загрузке профиля:", error)
+  }
 }
+
+
+/* ==================================================
+   Handle Logout
+   ================================================== */
 const handler = () => {
-  store.logout()
-  router.push("/main")
+  try {
+    store.logout()
+    router.push("/main")
+  } catch (error) {
+    console.error("Ошибка при выходе из системы:", error)
+  }
 }
+
+
+/* ==================================================
+   Lifecycle
+   ================================================== */
 onMounted(() => {
-  fetchProfile();
-  console.log(getProfile());
+  fetchProfile()
 })
 </script>
+
 
 <template>
   <div class = "h-screen grid grid-cols-1 place-items-center">

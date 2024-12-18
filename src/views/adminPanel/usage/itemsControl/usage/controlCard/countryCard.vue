@@ -1,12 +1,24 @@
 <script setup>
-import {Button} from "@/components/ui/button/index.js";
+/* ==================================================
+   Imports
+   ================================================== */
+import { Button } from "@/components/ui/button/index.js";
+import { useAddItemStore } from "@/API/addItem.js";
+import EditCountry from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/country/editCountry/editCountry.vue";
+
+/* ==================================================
+   Props
+   ================================================== */
 const props = defineProps({
   country: Array,
-})
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
+});
+
+/* ==================================================
+   State
+   ================================================== */
 const store = useAddItemStore();
-import EditCountry from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/country/editCountry/editCountry.vue";
 </script>
+
 
 <template>
   <div class = "flex justify-between items-center mt-3">

@@ -1,10 +1,17 @@
 <script setup>
-import { Slider } from '@/components/ui/catalogSlider/index.js'
-import { ref } from 'vue'
+/* ==================================================
+   Imports
+   ================================================== */
+import { Slider } from '@/components/ui/catalogSlider/index.js';
+import { ref } from 'vue';
 
-const range = ref([1600,2024])
-console.log(typeof range)
+/* ==================================================
+   Reactive State
+   ================================================== */
+const range = ref([1600, 2024]);
+
 </script>
+
 
 <template>
   <div class = "mt-10">

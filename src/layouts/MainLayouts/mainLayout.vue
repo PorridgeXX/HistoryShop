@@ -1,17 +1,26 @@
 <script setup>
-import Header from '@/components/Header/header.vue'
-import Catalog from "@/views/Catalog/catalogView.vue"
-import Footer from "@/components/Footer/footer.vue"
-import { Toaster } from '@/components/ui/toast'
-import {onMounted} from "vue";
-import {useLoginStore} from "@/API/loginRequests.js";
+/* ==================================================
+   Imports
+   ================================================== */
+import Header from '@/components/Header/header.vue';
+import Footer from "@/components/Footer/footer.vue";
+import { Toaster } from '@/components/ui/toast';
+import { onMounted } from 'vue';
+import { useLoginStore } from '@/API/loginRequests.js';
 
-const store = useLoginStore()
+/* ==================================================
+   Reactive State
+   ================================================== */
+const store = useLoginStore();
 
+/* ==================================================
+   Lifecycle Hooks
+   ================================================== */
 onMounted(() => {
-  store.loginCheck()
-})
+  store.loginCheck();
+});
 </script>
+
 
 <template>
 

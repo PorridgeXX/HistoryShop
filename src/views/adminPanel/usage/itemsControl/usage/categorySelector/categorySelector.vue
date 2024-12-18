@@ -1,4 +1,7 @@
 <script setup>
+/* ==================================================
+   Imports
+   ================================================== */
 import {
   Select,
   SelectContent,
@@ -7,24 +10,36 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import {getCategories} from "@/API/catalogRequests.js";
-import {onMounted, ref, watch} from "vue";
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
+} from '@/components/ui/select';
+import { getCategories } from "@/API/catalogRequests.js";
+import { onMounted, ref, watch } from "vue";
+import { useAddItemStore } from "@/API/addItem.js";
 
+/* ==================================================
+   Props
+   ================================================== */
 const props = defineProps({
   category: {
     type: String,
-  }
-})
+  },
+});
 
+/* ==================================================
+   Reactive State
+   ================================================== */
 const store = useAddItemStore();
-const categories = ref()
-const selectedCategories = ref(props.category)
+const categories = ref();
+const selectedCategories = ref(props.category);
 
-watch(() => props.category, (newValue) => {
-  selectedCategories.value = newValue;
-})
+/* ==================================================
+   Watchers
+   ================================================== */
+watch(
+    () => props.category,
+    (newValue) => {
+      selectedCategories.value = newValue;
+    }
+);
 
 watch(
     selectedCategories,
@@ -32,12 +47,17 @@ watch(
       store.category = newValue;
       console.log(store.category);
     }
-)
+);
+
+/* ==================================================
+   Lifecycle Hooks
+   ================================================== */
 onMounted(async () => {
-  const res = await getCategories()
-  categories.value = res.map(item => ({name: item[0], id: item[1]}))
-})
+  const res = await getCategories();
+  categories.value = res.map(item => ({ name: item[0], id: item[1] }));
+});
 </script>
+
 
 <template>
   <Select v-model = "selectedCategories">

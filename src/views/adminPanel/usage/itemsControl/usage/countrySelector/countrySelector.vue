@@ -1,4 +1,7 @@
 <script setup>
+/* ==================================================
+   Imports
+   ================================================== */
 import {
   Select,
   SelectContent,
@@ -7,32 +10,46 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import {getCountries} from "@/API/catalogRequests.js";
-import {onMounted, ref, watch} from "vue";
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
+} from '@/components/ui/select';
+import { getCountries } from "@/API/catalogRequests.js";
+import { onMounted, ref, watch } from "vue";
+import { useAddItemStore } from "@/API/addItem.js";
 
+/* ==================================================
+   Store и переменные
+   ================================================== */
 const store = useAddItemStore();
+const countries = ref();
+const selectedCountries = ref();
+
+/* ==================================================
+   Props
+   ================================================== */
 const props = defineProps({
   country: {
     type: String,
-  }
-})
-const countries = ref()
-console.log()
-const selectedCountries = ref(props.country)
+  },
+});
 
+/* ==================================================
+   Watchers
+   ================================================== */
 watch(() => props.country, (country) => {
-  selectedCountries.value = country
-})
+  selectedCountries.value = country;
+});
+
 watch(selectedCountries, (newValue) => {
   store.country = newValue;
   console.log(newValue);
-})
+});
+
+/* ==================================================
+   Lifecycle hooks
+   ================================================== */
 onMounted(async () => {
-  const res = await getCountries()
-  countries.value = res.map(item => ({name: item[0], id: item[1]}))
-})
+  const res = await getCountries();
+  countries.value = res.map(item => ({ name: item[0], id: item[1] }));
+});
 </script>
 
 <template>

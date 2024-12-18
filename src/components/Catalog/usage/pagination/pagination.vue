@@ -1,57 +1,78 @@
 <script setup>
+/* ==================================================
+   Imports
+   ================================================== */
+// Vue Composition API
+import { watch, ref, onMounted } from "vue";
 
+// Router Imports
+import { useRoute, useRouter } from "vue-router";
+
+// UI Imports
 import {
   Pagination,
   PaginationEllipsis,
-  PaginationFirst, PaginationLast,
+  PaginationFirst,
+  PaginationLast,
   PaginationList,
   PaginationListItem,
   PaginationNext,
   PaginationPrev
 } from "@/components/ui/pagination/index.js";
-import {Button} from "@/components/ui/button/index.js";
-import {useFetchGoodsStore} from "@/stores/fetchGoods.js"
-import {watch, ref, onMounted} from "vue"
-import {useRoute, useRouter} from "vue-router";
+import { Button } from "@/components/ui/button/index.js";
 
-const store = useFetchGoodsStore()
-const router = useRouter()
-const route = useRoute()
+// Store Imports
+import { useFetchGoodsStore } from "@/stores/fetchGoods.js";
 
-const totalCount = ref(store.total)
-const currentPage = ref(0)
+/* ==================================================
+   Reactive State
+   ================================================== */
+const store = useFetchGoodsStore();
+const router = useRouter();
+const route = useRoute();
 
+const totalCount = ref(store.total);
+const currentPage = ref(0);
+
+/* ==================================================
+   Methods
+   ================================================== */
 const fetchGoods = async (value) => {
-  currentPage.value = value
-  store.page = currentPage.value
-  await store.fetchAllGoods()
-  await router.push({ query: { page: currentPage.value } })
-}
+  currentPage.value = value;
+  store.page = currentPage.value;
+  await store.fetchAllGoods();
+  await router.push({ query: { page: currentPage.value } });
+};
 
-
+/* ==================================================
+   Watchers
+   ================================================== */
 watch(
     () => store.total,
     (newTotal) => {
-      totalCount.value = newTotal
+      totalCount.value = newTotal;
     }
-)
+);
 
 watch(
     () => route.query.page,
     async (newPage) => {
-      currentPage.value = parseInt(newPage)
-      await fetchGoods(newPage)
-      console.log(currentPage.value)
+      currentPage.value = parseInt(newPage);
+      await fetchGoods(newPage);
+      console.log(currentPage.value);
     }
-)
+);
 
+/* ==================================================
+   Lifecycle Hooks
+   ================================================== */
 onMounted(async () => {
-  await router.push({ query: { page: 1 } })
-  currentPage.value = 1
-  fetchGoods(currentPage.value)
-})
-
+  await router.push({ query: { page: 1 } });
+  currentPage.value = 1;
+  fetchGoods(currentPage.value);
+});
 </script>
+
 
 <template>
   <Pagination  v-slot="{ page }" :total="totalCount" :sibling-count="1" show-edges :default-page="1">

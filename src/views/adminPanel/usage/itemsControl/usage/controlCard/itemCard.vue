@@ -1,14 +1,20 @@
 <script setup>
-import {Button} from "@/components/ui/button"
+/* ==================================================
+   Imports
+   ================================================== */
 import DeleteItem from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/Item/deleteItem/deleteItem.vue";
 import ChangeItem from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/Item/changeItem/changeItem.vue";
 
+/* ==================================================
+   Props
+   ================================================== */
 const props = defineProps({
   item: {
-    type: Object
-  }
-})
+    type: Object,
+  },
+});
 </script>
+
 
 <template>
   <div class="flex mb-4 border-b items-center justify-between p-4 border-white">

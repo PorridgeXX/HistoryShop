@@ -1,12 +1,12 @@
 import axios from "axios";
-import {useFetchGoodsStore} from "@/stores/fetchGoods.js"
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
+import { useFetchGoodsStore } from "@/stores/fetchGoods.js";
+import { useAddItemStore } from "@/API/addItem.js";
+import { API_BASE_URL } from "@/axios/axios.js";
 
-
-export async function getGoodsList({pageSize = 9, page = null, from = 1800, to = 2024, categories = [], countries = []} = {}){
-    try{
+export async function getGoodsList({ pageSize = 9, page = null, from = 1800, to = 2024, categories = [], countries = [] } = {}) {
+    try {
         const res = await axios.post(
-            "http://localhost:8079/product/list",
+            `${API_BASE_URL}/product/list`,
             {
                 categories,
                 countries,
@@ -16,44 +16,41 @@ export async function getGoodsList({pageSize = 9, page = null, from = 1800, to =
                     pageSize,
                     page,
                     from,
-                    until: to
-                }
-        }
-        )
+                    until: to,
+                },
+            }
+        );
         const store = useFetchGoodsStore();
-        store.total = res.data.total
-        return res.data.products
+        store.total = res.data.total;
+        return res.data.products;
+    } catch (err) {
+        console.log(err);
+    }
+}
 
-    }catch(err){
-        console.log(err)
-    }
-}
 export async function getCategories() {
-    try{
+    try {
         const store = useAddItemStore();
-        const res = await axios.get(
-            "http://localhost:8079/categories"
-        )
-        store.categories = res.data.categories.map(item => [item.name, item.id])
-        return res.data.categories.map(item => [item.name, item.id])
-    }catch(err){
-        console.log(err)
+        const res = await axios.get(`${API_BASE_URL}/categories`);
+        store.categories = res.data.categories.map((item) => [item.name, item.id]);
+        return res.data.categories.map((item) => [item.name, item.id]);
+    } catch (err) {
+        console.log(err);
     }
 }
+
 export async function getCountries() {
-    try{
+    try {
         const store = useAddItemStore();
-        const res = await axios.get(
-            "http://localhost:8079/country"
-        )
-        console.log(res)
-        store.countries = res.data.countries.map(item => {
-            return [item.name, item.id]
-        })
-        return res.data.countries.map(item => {
-            return [item.name, item.id]
-        })
-    }catch(err){
-        console.log(err)
+        const res = await axios.get(`${API_BASE_URL}/country`);
+        console.log(res);
+        store.countries = res.data.countries.map((item) => {
+            return [item.name, item.id];
+        });
+        return res.data.countries.map((item) => {
+            return [item.name, item.id];
+        });
+    } catch (err) {
+        console.log(err);
     }
 }

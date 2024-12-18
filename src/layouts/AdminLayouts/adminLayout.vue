@@ -1,10 +1,17 @@
 <script setup>
-import { Toaster } from '@/components/ui/toast'
-import {useLoginStore} from "@/API/loginRequests.js";
-import {onMounted} from "vue";
-const store = useLoginStore()
+/* ==================================================
+   Imports
+   ================================================== */
+import { Toaster } from '@/components/ui/toast';
+import { useLoginStore } from '@/API/loginRequests.js';
+import { onMounted } from 'vue';
 
+/* ==================================================
+   Reactive State
+   ================================================== */
+const store = useLoginStore();
 </script>
+
 
 <template>
   <div class="wrapper">

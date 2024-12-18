@@ -1,5 +1,4 @@
 <script setup>
-import {loadFromLocalStorage} from "@/lib/utils.js";
 import {useLoginStore} from "@/API/loginRequests.js";
 
 const store = useLoginStore();

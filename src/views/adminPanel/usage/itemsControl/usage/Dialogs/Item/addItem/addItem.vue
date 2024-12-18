@@ -1,7 +1,9 @@
-<script setup>
-
-import { Textarea } from '@/components/ui/textarea/index.js'
-import {Button} from "@/components/ui/button/index.js";
+<script setup lang="ts">
+/* ==================================================
+   Imports
+   ================================================== */
+import { Textarea } from '@/components/ui/textarea/index.js';
+import { Button } from '@/components/ui/button/index.js';
 import {
   Dialog,
   DialogContent,
@@ -10,28 +12,42 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog/index.js'
-import { Input } from '@/components/ui/input/index.js'
-import { Label } from '@/components/ui/label/index.js'
-import CountrySelector from "@/views/adminPanel/usage/itemsControl/usage/countrySelector/countrySelector.vue"
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
+} from '@/components/ui/dialog/index.js';
+import { Input } from '@/components/ui/input/index.js';
+import { Label } from '@/components/ui/label/index.js';
+import { ref } from 'vue';
+import { useAddItemStore } from '@/API/addItem.js';
+import CountrySelector from "@/views/adminPanel/usage/itemsControl/usage/countrySelector/countrySelector.vue";
 import CategorySelector from "@/views/adminPanel/usage/itemsControl/usage/categorySelector/categorySelector.vue";
-import {ref} from "vue";
 
+/* ==================================================
+   State
+   ================================================== */
 const addItemStore = useAddItemStore();
-const name = ref('')
-const description = ref('')
-const price = ref(0)
-const year = ref(0)
+const name = ref<string>(''); // Название товара
+const description = ref<string>(''); // Описание товара
+const price = ref<number>(0); // Цена
+const year = ref<number>(0); // Год производства товара
 
+/* ==================================================
+   Handlers
+   ================================================== */
 const clickHandler = async () => {
-  addItemStore.name = name.value
-  addItemStore.description = description.value
-  addItemStore.price = parseInt(price.value)
-  addItemStore.year = parseInt(year.value)
-  await addItemStore.createItem()
-}
+  try {
+    // Сохранение данных в хранилище
+    addItemStore.name = name.value;
+    addItemStore.description = description.value;
+    addItemStore.price = parseInt(price.value.toString());
+    addItemStore.year = parseInt(year.value.toString());
+
+    // Вызов метода для создания товара
+    await addItemStore.createItem();
+  } catch (error) {
+    console.error('Ошибка при создании товара:', error);
+  }
+};
 </script>
+
 
 <template>
   <Dialog>

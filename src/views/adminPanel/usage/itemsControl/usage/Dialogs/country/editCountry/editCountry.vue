@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/* ==================================================
+   Imports
+   ================================================== */
 import {
   Dialog,
   DialogContent,
@@ -7,20 +10,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {ref} from "vue";
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
-const name = ref('')
-const props = defineProps({
-  id: {
-    type: Number,
-  }
-})
-const store = useAddItemStore();
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ref } from 'vue';
+import { useAddItemStore } from '@/API/addItem.js';
+
+/* ==================================================
+   Props
+   ================================================== */
+const props = defineProps<{
+  id: number;
+}>();
+
+/* ==================================================
+   State и хук
+   ================================================== */
+const name = ref<string>(''); // Локальный state для имени
+const store = useAddItemStore(); // Хук для доступа к хранилищу данных
 </script>
+
 
 <template>
   <Dialog>

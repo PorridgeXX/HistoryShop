@@ -1,18 +1,33 @@
 <script setup>
-import {useCartStore} from "@/components/Cart/js/cart.js";
-import {onMounted} from "vue";
-import CartItem from "@/components/Cart/usage/cartItem.vue"
+/* ==================================================
+   Imports
+   ================================================== */
+// Store Imports
+import { useCartStore } from "@/components/Cart/js/cart.js";
+import { useUiStore } from "@/components/Cart/js/ui.js";
+
+// Component Imports
+import CartItem from "@/components/Cart/usage/cartItem.vue";
 import CartPlaceholder from "@/components/Cart/usage/CartPlaceholder.vue";
-import MakeOrder from "@/components/Cart/usage/makeOrder.vue"
-import {useUiStore} from "@/components/Cart/js/ui.js";
-import modal from "@/components/Cart/usage/modal.vue"
+import MakeOrder from "@/components/Cart/usage/makeOrder.vue";
+import modal from "@/components/Cart/usage/modal.vue";
+
+// Vue Composition API
+import { onMounted } from "vue";
+
+/* ==================================================
+   Variables
+   ================================================== */
 const uiStore = useUiStore();
 const store = useCartStore();
 
+/* ==================================================
+   Lifecycle Hooks
+   ================================================== */
 onMounted(() => {
-  store.loadCart()
-})
-console.log(typeof store.cart)
+  store.loadCart();
+});
+
 </script>
 
 <template>

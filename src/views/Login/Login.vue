@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
+/* ==================================================
+   Imports
+   ================================================== */
 import { ref, watch } from "vue"
-import { registration } from '@/API/registrationRequests'
+import { useRouter } from "vue-router"
+import * as yup from 'yup'
+import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useLoginStore } from '@/API/loginRequests'
+import { registration } from '@/API/registrationRequests'
 import {
   Card,
   CardContent,
@@ -21,18 +26,22 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs'
 
-import * as yup from 'yup' // Импорты для валидации
 
+/* ==================================================
+   State
+   ================================================== */
 const { toast } = useToast()
-import {useRouter} from "vue-router";
-
 const router = useRouter()
+const loginStore = useLoginStore()
+
 const user = ref('')
 const password = ref('')
 const email = ref('')
 const currentTab = ref('account')
-const loginStore = useLoginStore()
-// Схемы валидации
+
+/* ==================================================
+   Validation Schemas
+   ================================================== */
 const loginSchema = yup.object({
   user: yup.string().required('Логин обязателен'),
   password: yup.string().required('Пароль обязателен'),
@@ -44,11 +53,15 @@ const registrationSchema = yup.object({
   password: yup.string().min(3, 'Пароль должен быть не менее 3 символов').required('Пароль обязателен'),
 })
 
-// Переменные для ошибок
+/* ==================================================
+   Error States
+   ================================================== */
 const errorsLogin = ref({ user: null, password: null })
 const errorsRegister = ref({ user: null, email: null, password: null })
 
-// Проверяем данные для входа
+/* ==================================================
+   Watchers
+   ================================================== */
 watch([user, password], async () => {
   try {
     await loginSchema.validate({ user: user.value, password: password.value })
@@ -61,7 +74,6 @@ watch([user, password], async () => {
   }
 })
 
-// Проверяем данные для регистрации
 watch([user, email, password], async () => {
   try {
     await registrationSchema.validate({ user: user.value, email: email.value, password: password.value })
@@ -75,6 +87,9 @@ watch([user, email, password], async () => {
   }
 })
 
+/* ==================================================
+   Methods
+   ================================================== */
 const register = async () => {
   try {
     await registration(user.value, email.value, password.value)
@@ -120,6 +135,7 @@ const logining = async () => {
   }
 }
 </script>
+
 
 <template>
   <div class="h-screen w-full grid grid-cols-1 place-items-center">

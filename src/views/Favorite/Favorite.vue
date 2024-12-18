@@ -1,18 +1,30 @@
 <script setup>
+/* ==================================================
+   Imports
+   ================================================== */
+import { onMounted } from "vue";
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/toast/use-toast';
 import { useFavoriteStore } from '@/stores/favoriteStore.js';
-import {useCartStore} from "@/components/Cart/js/cart.js";
-import { useToast } from '@/components/ui/toast/use-toast'
-import {onMounted} from "vue";
+import { useCartStore } from "@/components/Cart/js/cart.js";
 
-const {toast} = useToast();
+/* ==================================================
+   State
+   ================================================== */
+const { toast } = useToast();
 const favoriteStore = useFavoriteStore();
+
+/* ==================================================
+   Methods
+   ================================================== */
 const handlerClick = async (id) => {
-  const store = await useCartStore();
+  const store = useCartStore();
   const res = await store.saveToCart(id);
+
   if (res) {
     toast({
       title: 'Товар добавлен',
-      description: `Был добавлен товар в корзину на сумму ${props.item.price}`,
+      description: `Был добавлен товар в корзину`,
       duration: 2000,
     });
   } else {
@@ -23,10 +35,14 @@ const handlerClick = async (id) => {
   }
 };
 
+/* ==================================================
+   Lifecycle hooks
+   ================================================== */
 onMounted(() => {
   favoriteStore.loadFavorites();
-})
+});
 </script>
+
 
 <template>
   <div class="container">
@@ -37,7 +53,7 @@ onMounted(() => {
       <div
           v-for="item in favoriteStore.favorites"
           :key="item.id"
-          class="w-full h-auto p-4 rounded-lg bg-white shadow-lg"
+          class="w-[325px] h-auto p-4 rounded-lg bg-white shadow-lg"
       >
         <!-- Изображение товара -->
         <img
@@ -55,18 +71,15 @@ onMounted(() => {
 
         <!-- Кнопки -->
         <div class="mt-2 flex gap-2">
-          <button
-              @click="favoriteStore.removeFavorite(item.id)"
-              class="py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600"
-          >
+          <Button class = "bg-[#7f0000]" @click="favoriteStore.removeFavorite(item.id)">
             Удалить из избранного
           </button>
-          <button
+          <Button
               @click="handlerClick(item.id)"
               class="py-2 px-4 bg-black text-white rounded hover:bg-gray-800"
           >
-            Добавить
-          </button>
+            В корзину
+          </Button>
         </div>
       </div>
     </div>

@@ -1,6 +1,5 @@
 <script setup>
  import Logo from "@/components/ui/logo/logo.vue"
- import Search from "@/components/ui/search/search.vue"
  import HeaderList from "@/components/Header/usage/headerList/headerList.vue"
 
 </script>

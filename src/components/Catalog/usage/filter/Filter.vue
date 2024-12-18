@@ -1,23 +1,39 @@
 <script setup>
-import {getCategories, getCountries} from "@/API/catalogRequests.js";
-import {onMounted, ref} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import {Checkbox} from "@/components/ui/checkbox/index.js";
-import {Button} from "@/components/ui/button/index.js";
-import {useFetchGoodsStore} from "@/stores/fetchGoods.js";
+/* ==================================================
+   Imports
+   ================================================== */
+// Vue Composition API
+import { onMounted, ref } from "vue";
 
+// Router
+import { useRouter } from "vue-router";
+
+// UI Imports
+import { Checkbox } from "@/components/ui/checkbox/index.js";
+import { Button } from "@/components/ui/button/index.js";
+
+// API Imports
+import { getCategories, getCountries } from "@/API/catalogRequests.js";
+
+// Store Imports
+import { useFetchGoodsStore } from "@/stores/fetchGoods.js";
+
+/* ==================================================
+   Reactive State
+   ================================================== */
 const categories = ref();
-const route = useRoute();
-const router = useRouter();
 const countries = ref();
 const addedCategories = ref([]);
 const addedCountries = ref([]);
+const checkBoxState = ref({});
 const store = useFetchGoodsStore();
+const router = useRouter();
 
-const checkBoxState = ref({})
-
+/* ==================================================
+   Methods
+   ================================================== */
 const addCategory = (category) => {
-  const isChecked = checkBoxState.value[category]
+  const isChecked = checkBoxState.value[category];
   checkBoxState.value[category] = !isChecked;
   if (!isChecked) {
     addedCategories.value.push(category);
@@ -25,51 +41,60 @@ const addCategory = (category) => {
   } else {
     addedCategories.value = addedCategories.value.filter((item) => item !== category);
   }
+};
 
-}
-const addCountry = (contry) => {
-  const isChecked = checkBoxState.value[contry]
-  checkBoxState.value[contry] = !isChecked;
+const addCountry = (country) => {
+  const isChecked = checkBoxState.value[country];
+  checkBoxState.value[country] = !isChecked;
   if (!isChecked) {
-    addedCountries.value.push(contry);
-    console.log(contry);
+    addedCountries.value.push(country);
+    console.log(country);
   } else {
-    addedCountries.value = addedCategories.value.filter((item) => item !== contry);
+    addedCountries.value = addedCountries.value.filter((item) => item !== country);
   }
+};
 
-}
 const sendFilter = async () => {
   store.categories = addedCategories.value;
   store.countries = addedCountries.value;
   await store.fetchAllGoods();
-  await router.replace({query: {page: 1}});
-}
+  await router.replace({ query: { page: 1 } });
+};
+
 const resetFilter = async () => {
-  addedCategories.value = []
-  console.log(checkBoxState.value, 'до')
+  addedCategories.value = [];
+  console.log(checkBoxState.value, 'до');
+
   for (let key in checkBoxState.value) {
-    checkBoxState.value[key] = false
+    checkBoxState.value[key] = false;
   }
-  console.log(checkBoxState.value, 'после')
-  addedCountries.value = []
-  store.countries = []
-  store.categories = []
+
+  console.log(checkBoxState.value, 'после');
+
+  addedCountries.value = [];
+  store.countries = [];
+  store.categories = [];
+
   await store.fetchAllGoods();
-}
+};
 
-
+/* ==================================================
+   Lifecycle Hook
+   ================================================== */
 onMounted(async () => {
   const res = await getCategories();
   const res2 = await getCountries();
+
   categories.value = res.map((item) => item[0]);
   countries.value = res2.map((item) => item[0]);
-  console.log(res)
-})
 
+  console.log(res);
+});
 </script>
 
+
 <template>
-  <div class="ml-4">
+  <div class="ml-4 min-w-[270px]">
     <h1 class="header32 filter_name">Выбрать фильтры</h1>
     <div class="mt-3">
       <h3 class="header20 flex">Страна </h3>

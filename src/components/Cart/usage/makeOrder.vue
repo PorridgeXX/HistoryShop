@@ -1,8 +1,8 @@
 <script setup>
 // components import
-import { Input } from '@/components/ui/input/index.js';
-import { Label } from '@/components/ui/label/index.js';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group/index.js';
+import {Input} from "@/components/ui/input/index.js";
+import {Label} from "@/components/ui/label/index.js";
+import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group/index.js";
 import {
   Select,
   SelectContent,
@@ -10,78 +10,97 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select/index.js';
-import { Checkbox } from '@/components/ui/checkbox/index.js';
+} from "@/components/ui/select/index.js";
+import {Checkbox} from "@/components/ui/checkbox/index.js";
 import {useUiStore} from "@/components/Cart/js/ui.js";
 import {useCartStore} from "@/components/Cart/js/cart.js";
-import modal from "@/components/Cart/usage/modal.vue"
+// Stores
 const store = useCartStore();
 const uiStore = useUiStore();
+
 // yup import
 import * as yup from "yup";
 
 // vue imports
-import { ref } from "vue";
-import {Button} from "@/components/ui/button/index.js";
+import {ref, computed} from "vue";
 
-
-// variables
-const nameInput = ref('');
-const emailInput = ref('');
-const selector = ref('');
-const emailError = ref('');
+// Form state variables
+const nameInput = ref("");
+const emailInput = ref("");
+const selector = ref("");
+const emailError = ref("");
 
 // Email validation schema
 const emailSchema = yup.string().email("Некорректный формат email").required("Введите email");
 
-// Function to validate email
+// Validate email
 const validateEmail = async () => {
   try {
     await emailSchema.validate(emailInput.value);
-    emailError.value = '';
+    emailError.value = "";
   } catch (error) {
     emailError.value = error.message;
   }
 };
 
+// Check if the form is valid
+const isFormValid = computed(() => {
+  return (
+      nameInput.value.trim() !== "" &&
+      !emailError.value &&
+      selector.value.trim() !== "" &&
+      store.checkedList.length > 0 // Проверка, что есть выбранные товары
+  );
+});
+
+
+// Click handler for "Оформить заказ"
 const clickHandler = () => {
-  uiStore.isDialogOpen = true
-  store.makeOrder()
-}
+  if (!isFormValid.value) return;
+  uiStore.isDialogOpen = true;
+  store.makeOrder();
+};
 </script>
 
 <template>
   <div class="mt-8">
-    <h3 class="header32 mb-8">Оформление заказа</h3>
-    <div class=" p-10 max-h-[555px] bg-white rounded-lg flex flex-col gap-8">
+    <h3 class="text-2xl font-bold mb-8">Оформление заказа</h3>
+    <div class="p-10 max-h-[555px] bg-white rounded-lg shadow flex flex-col gap-8">
+      <!-- Name Input -->
       <div class="flex gap-8">
-        <div class="grid w-full max-w-sm items-center gap-1.5">
-          <div class=" w-[286px] flex justify-between">
-            <Label for="email">Имя</Label>
-            <span v-if="!nameInput" class="text-[#FF60C3] h-0.5">*</span>
+        <div class="flex flex-col gap-1 w-full max-w-sm">
+          <div class="flex justify-between">
+            <Label for="name">Имя</Label>
+            <span v-if="!nameInput" class="text-pink-500">*</span>
           </div>
-          <Input v-model="nameInput" class="w-[286px] bg-[#E4E7EB] focus:outline-none focus:ring-0" placeholder=""
-                 type="text"/>
-          <div class="error-placeholder"></div> <!-- Пустое место для ошибки -->
+          <Input
+              v-model="nameInput"
+              id="name"
+              class="w-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder=""
+              type="text"
+          />
         </div>
-        <div class="grid w-full max-w-sm items-center gap-1.5">
-          <div class="flex w-[286px] justify-between">
+
+        <!-- Email Input -->
+        <div class="flex flex-col gap-1 w-full max-w-sm">
+          <div class="flex justify-between">
             <Label for="email">E-mail</Label>
-            <span v-if="!emailInput" class="text-[#FF60C3] h-0.5">*</span>
+            <span v-if="!emailInput" class="text-pink-500">*</span>
           </div>
           <Input
               v-model="emailInput"
               @input="validateEmail"
               id="email"
-              class="w-[286px] bg-[#E4E7EB] focus:outline-none focus:ring-0"
+              class="w-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder=""
               type="email"
           />
-          <div class="error-placeholder">
-            <span v-if="emailError" class="text-[#FF60C3] text-sm">{{ emailError }}</span>
-          </div>
+          <span v-if="emailError" class="text-sm text-pink-500">{{ emailError }}</span>
         </div>
       </div>
+
+      <!-- Radio Group -->
       <div>
         <RadioGroup class="flex gap-8" default-value="option-one">
           <div class="flex items-center space-x-2">
@@ -94,13 +113,15 @@ const clickHandler = () => {
           </div>
         </RadioGroup>
       </div>
+
+      <!-- Payment Method Selector -->
       <div>
-        <div class="w-[600px] items-center flex justify-between">
-          <Label class="mt-2">Способ оплаты</Label>
-          <span v-if="!selector" class="text-[#FF60C3] h-0.5">*</span>
+        <div class="flex justify-between items-center">
+          <Label>Способ оплаты</Label>
+          <span v-if="!selector" class="text-pink-500">*</span>
         </div>
         <Select v-model="selector">
-          <SelectTrigger class="w-[604px] h-[48px] bg-[#E4E7EB]">
+          <SelectTrigger class="w-full h-12 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <SelectValue placeholder="Не выбрано"/>
           </SelectTrigger>
           <SelectContent>
@@ -111,48 +132,30 @@ const clickHandler = () => {
           </SelectContent>
         </Select>
       </div>
-      <div class="flex gap-3 items-center">
+
+      <!-- Packaging Option -->
+      <div class="flex items-center gap-3">
         <Checkbox/>
         <Label>Нужна упаковка</Label>
       </div>
+
+      <!-- Submit Button -->
       <div>
-            <button
-                @click = "clickHandler()"
-                class="cart__btn">
-              Оформить заказ
-            </button>
+        <button
+            @click="clickHandler"
+            :disabled="!isFormValid"
+            class="w-48 h-12 flex items-center justify-center text-white bg-indigo-500 rounded-lg shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          Оформить заказ
+        </button>
       </div>
     </div>
   </div>
-
-
 </template>
 
 <style scoped>
-.cart__btn {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: white;
-  padding: 0 32px;
-  max-width: 193px;
-  height: 48px;
-  justify-content: center;
-  border-radius: 8px;
-  background: var(--main-color);
-}
-
-.input:active, .input:hover, .input:focus {
-  border: none !important;
-}
-
-/* Фиксированный размер для ошибки */
-.error-placeholder {
-  min-height: 20px; /* Устанавливаем фиксированное пространство */
-  font-size: 0.875rem; /* Размер текста для ошибок */
-}
-
-.text-sm {
+/* Ошибка */
+.text-pink-500 {
   font-size: 0.875rem;
 }
 </style>

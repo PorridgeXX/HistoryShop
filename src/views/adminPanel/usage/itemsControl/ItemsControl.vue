@@ -1,42 +1,62 @@
 <script setup>
-import {ScrollArea} from '@/components/ui/scroll-area'
-import {useFetchGoodsStore} from "@/stores/fetchGoods.js";
-import {getCategories} from "@/API/catalogRequests.js";
-import {getCountries} from "@/API/catalogRequests.js";
+/* ==================================================
+   Imports
+   ================================================== */
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { onMounted, ref, watch } from 'vue';
+import { useFetchGoodsStore } from "@/stores/fetchGoods.js";
+import { useAddItemStore } from "@/API/addItem.js";
+import { getCategories, getCountries } from "@/API/catalogRequests.js";
+
 import ControlCard from "@/views/adminPanel/usage/itemsControl/usage/controlCard/itemCard.vue";
-import {onMounted, ref, watch} from "vue";
 import AddItem from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/Item/addItem/addItem.vue";
 import CategorySelector from "@/views/adminPanel/usage/itemsControl/usage/categorySelector/categorySelector.vue";
 import CountryCard from "@/views/adminPanel/usage/itemsControl/usage/controlCard/countryCard.vue";
 import CategoryCard from "@/views/adminPanel/usage/itemsControl/usage/controlCard/categoryCard.vue";
 import AddCategory from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/category/addCategory/addCategory.vue";
 import AddCountry from "@/views/adminPanel/usage/itemsControl/usage/Dialogs/country/addCountry/addCountry.vue";
-import {useAddItemStore} from "@/views/adminPanel/usage/itemsControl/usage/js/addItem.js";
-const store = useFetchGoodsStore();
-const controlStore = useAddItemStore()
-const countries = ref(controlStore.countries)
-const categories = ref(controlStore.categories)
-const res = ref()
 
-watch(() => controlStore.countries, (newCountries) => {
-        countries.value = newCountries;
+/* ==================================================
+   Reactive State
+   ================================================== */
+const store = useFetchGoodsStore();
+const controlStore = useAddItemStore();
+const countries = ref(controlStore.countries);
+const categories = ref(controlStore.categories);
+const res = ref();
+
+/* ==================================================
+   Watchers
+   ================================================== */
+watch(
+    () => controlStore.countries,
+    (newCountries) => {
+      countries.value = newCountries;
     }
-)
-watch(() => controlStore.categories, (newCategories) => {
+);
+
+watch(
+    () => controlStore.categories,
+    (newCategories) => {
       categories.value = newCategories;
     }
-)
+);
 
+/* ==================================================
+   Lifecycle Hooks
+   ================================================== */
 onMounted(async () => {
-  await store.fetchAllGoods({pageSize: 150})
-  await getCategories()
-  await getCountries()
-  countries.value = controlStore.countries
-  categories.value = controlStore.categories
-  console.log(controlStore.categories)
-})
+  await store.fetchAllGoods({ pageSize: 150 });
+  await getCategories();
+  await getCountries();
 
+  countries.value = controlStore.countries;
+  categories.value = controlStore.categories;
+
+  console.log(controlStore.categories);
+});
 </script>
+
 
 <template>
   <div class = "grid grid-cols-1 h-screen place-items-center gap-5 place-content-center ">

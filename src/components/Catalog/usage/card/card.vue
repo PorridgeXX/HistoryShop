@@ -1,21 +1,37 @@
 <script setup>
-import { Dialog, DialogContent, DialogDescription, DialogTrigger } from '@/components/ui/dialog'
-import { useToast } from '@/components/ui/toast/use-toast'
+/* ==================================================
+   Imports
+   ================================================== */
+// Vue Composition API
 import { ref } from "vue";
+
+// UI Imports
+import { Dialog, DialogContent, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
+import { useToast } from '@/components/ui/toast/use-toast';
+
+// Store Imports
 import { useCartStore } from "@/components/Cart/js/cart.js";
 import { useFavoriteStore } from "@/stores/favoriteStore.js";
 
+/* ==================================================
+   Variables
+   ================================================== */
 const store = useCartStore();
 const { toast } = useToast();
 const favoriteStore = useFavoriteStore();
 
+/* ==================================================
+   Props
+   ================================================== */
 const props = defineProps({
   item: {
     type: Object,
-    required: true,
   },
 });
 
+/* ==================================================
+   Methods
+   ================================================== */
 const handlerClick = async (id) => {
   const res = await store.saveToCart(id);
   if (res) {
@@ -35,8 +51,16 @@ const handlerClick = async (id) => {
 const toggleFavorite = () => {
   if (favoriteStore.isFavorite(props.item.id)) {
     favoriteStore.removeFavorite(props.item.id);
+    toast({
+      title: 'Товар был удален из избранного',
+      duration: 5000,
+    });
   } else {
     favoriteStore.addFavorite(props.item);
+    toast({
+      title: 'Товар добавлен в избранное',
+      duration: 5000,
+    });
   }
 };
 </script>
@@ -79,7 +103,7 @@ const toggleFavorite = () => {
         <div class="flex gap-2">
           <button @click="handlerClick(props.item.id)" class="cart__btn">В корзину</button>
           <button @click="toggleFavorite" class="bookmark__btn !important">
-            <img src="/hui.svg" alt="Избранное">
+            <img :src="favoriteStore.isFavorite(props.item.id) ? '/redhui.svg' : '/hui.svg'" alt="Избранное">
           </button>
         </div>
       </div>
